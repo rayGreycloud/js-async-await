@@ -58,12 +58,37 @@ const getGrades = (schoolId) => {
   });
 };
 
-// Test fetching grades
-  getGrades(11).then((grades) => {
-    console.log(grades);
+// function to get status
+const getStatus = (userId) => {
+  let user;
+  return getUser(userId).then((tempUser) => {
+    user = tempUser;
+    return getGrades(user.schoolId);
+  }).then((grades) => {
+    let average = 0;
+
+    if (grades.length > 0) {
+      // Calculate average
+      average = grades.map((grade) => grade.grade).reduce((a, b) => a + b) / grades.length;
+    }
+
+    return `${user.name} has a grade average of ${average}% in the class.`;
+  });
+};
+
+// Test fetching status (grade average)
+  getStatus(22).then((status) => {
+    console.log(status);
   }).catch((e) => {
     console.log(e);
   });
+
+// Test fetching grades
+  // getGrades(11).then((grades) => {
+  //   console.log(grades);
+  // }).catch((e) => {
+  //   console.log(e);
+  // });
 
   // Test fetching user
   // getUser(2).then((user) => {
