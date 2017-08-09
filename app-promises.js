@@ -76,8 +76,22 @@ const getStatus = (userId) => {
   });
 };
 
-// Test fetching status (grade average)
-  getStatus(22).then((status) => {
+// refactored function to get status
+const getStatusAlt = async (userId) => {
+  const user = await getUser(userId);
+  const grades = await getGrades(user.schoolId);
+  let average = 0;
+
+  if (grades.length > 0) {
+    // Calculate average
+    average = grades.map((grade) => grade.grade).reduce((a, b) => a + b) / grades.length;
+  }
+
+  return `${user.name} has a grade average of ${average}% in the class.`;
+};
+
+// Test fetching status
+  getStatusAlt(2).then((status) => {
     console.log(status);
   }).catch((e) => {
     console.log(e);
